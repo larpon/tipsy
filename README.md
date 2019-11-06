@@ -37,7 +37,7 @@ v -o bin/syncs clients/syncs.v
 Right now tipsy need a directory with a file for each process name you want to provide a context for:
 ```
 mkdir ~/tips
-echo "This is tips's context" > ~/tips/tipsy
+echo "This is tipsy's context" > ~/tips/tipsy
 echo "Konsole tips'n'tricks" > ~/tips/konsole
 echo "Stuff for nvim" > ~/tips/nvim
 ```
