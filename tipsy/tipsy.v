@@ -99,32 +99,12 @@ fn rm_file(path string) {
     }
 }
 
-fn walk(path string, fnc fn(path string)) {
-    if !os.is_dir(path) {
-        return
-    }
-    mut files := os.ls(path) or { panic(err) }
-    for i, file in files {
-        if file.starts_with('.') {
-            continue
-        }
-        p := path + os.path_separator + file
-        if os.is_dir(p) {
-            walk(p, fnc)
-        }
-        else if os.file_exists(p) {
-            fnc(p)
-        }
-    }
-    return
-}
-
 pub fn (t Tipsy) end() {
-    pid_dir := t.config.dirs['work']+os.path_separator+t.pid.str()
+    pid_dir := [t.config.dirs['work'], t.pid.str()].join(os.path_separator)
     println('Cleaning up '+pid_dir)
     if os.dir_exists(pid_dir) {
-        walk(pid_dir, rm_file)
-        os.rmdir(pid_dir+os.path_separator+'context')
+        os.walk(pid_dir, rm_file)
+        os.rmdir([pid_dir,'context'].join(os.path_separator))
         os.rmdir(pid_dir)
     }
 }
