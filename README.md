@@ -2,10 +2,10 @@
 
 A simple (experimental) productivity tool written in [v](https://vlang.io/).
 
-How tipsy work:
-1. Extracts information from active X11 window(s)
-2. Try to generate a meaningful context set
-3. Write the context to disk for clients to build meaningful context output from
+How tipsy works:
+1. Extract information (title, pid, window id etc.) from active X11 window
+2. Generate a meaningful context keyword set
+3. Write the context keywords to disk for clients to build meaningful output from
 
 Currently tipsy only work on X11/Linux hosts.
 
@@ -20,14 +20,14 @@ Currently tipsy only work on X11/Linux hosts.
 
 Make sure you have [v installed](https://github.com/vlang/v#installing-v-from-source).
 
-Building the context extractor (`tipsy`)
+Building `tipsy` (context extractor)
 ```
 git clone git@github.com:larpon/tipsy.git
 cd tipsy
 v -o bin/tipsy tipsy.v
 ```
 
-Building the sample context data viewer (`syncs`)
+Building `syncs` (sample context data viewer)
 ```
 v -o bin/syncs clients/syncs.v
 ```
@@ -48,12 +48,12 @@ To try and extract context from sub-processes you currently need to specify whic
 echo "konsole" > ~/tips/parents.tipsy
 ```
 
-Run extractor
+Run tipsy (extractor)
 ```
 bin/tipsy --tips ~/tips
 ```
 
-Run sample client
+Run syncs (sample client)
 ```
 bin/syncs --tips ~/tips
 ```
