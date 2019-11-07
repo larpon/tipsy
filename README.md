@@ -1,6 +1,6 @@
 # Tipsy
 
-A simple (experimental) productivity tool written in [v](https://vlang.io/).
+A simple (experimental) productivity tool written in [V](https://vlang.io/).
 
 (Currently tipsy only work on X11/Linux hosts)
 
