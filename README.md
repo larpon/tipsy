@@ -10,7 +10,7 @@ How tipsy work:
 Currently tipsy only work on X11/Linux hosts.
 
 ## Features
-* An easy way to show your own notes in context based on your active application(s)
+* Easy way to show your own notes in context based on your active application(s)
 * Multiple running context extractors and clients supported
 
 ## Dependencies
