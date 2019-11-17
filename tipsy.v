@@ -4,32 +4,6 @@ import flag
 
 import tipsy
 
-fn tmp_dir() string {
-    mut path := os.getenv('TMPDIR')
-    $if linux {
-        if path == '' {
-            path = '/tmp'
-        }
-    }
-    $if mac {
-        if path == '' {
-            path = C.NSTemporaryDirectory() // TODO untested
-        }
-        if path == '' {
-            path = '/tmp'
-        }
-    }
-    $if windows {
-        // TODO see Qt's implementation?
-        // https://doc.qt.io/qt-5/qdir.html#tempPath
-        // https://github.com/qt/qtbase/blob/e164d61ca8263fc4b46fdd916e1ea77c7dd2b735/src/corelib/io/qfilesystemengine_win.cpp#L1275
-        path = os.getenv('TEMP')
-        if path == '' { path = os.getenv('TMP') }
-        if path == '' { path = 'C:/tmp' }
-    }
-    return path
-}
-
 fn print_and_exit( msg string, exit_code int ) {
     if exit_code == 2 { eprintln(msg) }
     else { println(msg) }
@@ -38,7 +12,7 @@ fn print_and_exit( msg string, exit_code int ) {
 
 fn on_signal( signum int ) {
     //println('Bye bye via '+os.sigint_to_signal_name(signum))
-    work_dir := [tmp_dir(), '.tipsy'].join(os.path_separator)
+    work_dir := [os.tmpdir(), '.tipsy'].join(os.path_separator)
     end_file := [work_dir,C.getpid().str()+'-signal'].join(os.path_separator)
 
     if !os.dir_exists(work_dir) { os.mkdir_all(work_dir) }
@@ -73,7 +47,7 @@ fn main() {
         //tips_dir = default_dir
     }
 
-    work_dir := [tmp_dir(), '.tipsy'].join(os.path_separator)
+    work_dir := [os.tmpdir(), '.tipsy'].join(os.path_separator)
 
     end_file := [work_dir,C.getpid().str()+'-signal'].join(os.path_separator)
     if os.file_exists(end_file) { os.rm(end_file) }

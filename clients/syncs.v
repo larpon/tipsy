@@ -2,33 +2,6 @@ import os
 import flag
 import time
 
-// TODO unify with the one used in tipsy.v
-fn tmp_dir() string {
-    mut path := os.getenv('TMPDIR')
-    $if linux {
-        if path == '' {
-            path = '/tmp'
-        }
-    }
-    $if mac {
-        if path == '' {
-            path = C.NSTemporaryDirectory() // TODO untested
-        }
-        if path == '' {
-            path = '/tmp'
-        }
-    }
-    $if windows {
-        // TODO see Qt's implementation?
-        // https://doc.qt.io/qt-5/qdir.html#tempPath
-        // https://github.com/qt/qtbase/blob/e164d61ca8263fc4b46fdd916e1ea77c7dd2b735/src/corelib/io/qfilesystemengine_win.cpp#L1275
-        path = os.getenv('TEMP')
-        if path == '' { path = os.getenv('TMP') }
-        if path == '' { path = 'C:/tmp' }
-    }
-    return path
-}
-
 fn main() {
 
     mut warning_display := false
@@ -55,7 +28,7 @@ fn main() {
         return
     }
 
-    tipsy_work := [tmp_dir(), '.tipsy'].join(os.path_separator)
+    tipsy_work := [os.tmpdir(), '.tipsy'].join(os.path_separator)
 
     if warning_display {
         time.sleep_ms(2000)
