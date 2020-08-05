@@ -1,4 +1,5 @@
 import os
+import term
 import flag
 import time
 
@@ -13,10 +14,10 @@ fn main() {
 
     fp.skip_executable()
 
-    pid := fp.int('pid', 0, 'Read context from <pid> tipsy process')
+    pid := fp.int('pid', 0, 0, 'Read context from <pid> tipsy process')
 
-    tips_dir := fp.string('tips', '', 'Path to tips')
-    if !os.dir_exists(tips_dir) {
+    tips_dir := fp.string('tips', 0, '', 'Path to tips')
+    if !os.is_dir(tips_dir) {
         warning_display = true
         eprintln('Tips directory "$tips_dir" doesn\'t exist')
     }
@@ -28,7 +29,7 @@ fn main() {
         return
     }
 
-    tipsy_work := [os.tmpdir(), '.tipsy'].join(os.path_separator)
+    tipsy_work := [os.temp_dir(), '.tipsy'].join(os.path_separator)
 
     if warning_display {
         time.sleep_ms(2000)
@@ -61,10 +62,10 @@ fn main() {
         if tapp != app {
             app = tapp
 
-            os.clear()
+            term.clear()
 
             app_file := [tips_dir,'$app'].join(os.path_separator)
-            if(os.file_exists(app_file)) {
+            if os.exists(app_file) {
                 tip := os.read_file(app_file) or { panic(err) }
                 println(tip)
             } else {

@@ -59,28 +59,28 @@ pub fn new(config Config) Tipsy {
 
     expect_tool('xdotool')
 
-    data_path := os.realpath(config.dirs['tips'])
+    data_path := os.real_path(config.dirs['tips'])
     if !os.is_dir(data_path) { panic('Tipsy: "$data_path" is not a directory') }
 
     pid := C.getpid() // TODO linux only ??
 
     println('Tipsy ('+pid.str()+') in "$data_path"')
 
-    mut apps := []string
+    mut apps := []string{}
     mut file := ''
     // Look for accepted process names i.e. "tips" for each processname
     files := os.ls(data_path) or { panic(err) }
     for e in files {
         file = data_path+os.path_separator+e
-        if os.file_exists(file) {
+        if os.exists(file) {
             apps << e
         }
     }
 
     parents_file := [data_path,'parents.tipsy'].join(os.path_separator)
-    mut parents := []string
-    if os.file_exists(parents_file) {
-        parents = os.read_lines(parents_file)
+    mut parents := []string{}
+    if os.exists(parents_file) {
+        parents = os.read_lines(parents_file) or { []string{} }
         apps.delete(apps.index('parents.tipsy'))
     }
 
@@ -94,7 +94,7 @@ pub fn new(config Config) Tipsy {
 }
 
 fn rm_file(path string) {
-    if os.file_exists(path) {
+    if os.exists(path) {
         os.rm(path)
     }
 }
@@ -102,14 +102,14 @@ fn rm_file(path string) {
 pub fn (t Tipsy) end() {
     pid_dir := [t.config.dirs['work'], t.pid.str()].join(os.path_separator)
     println('Cleaning up '+pid_dir)
-    if os.dir_exists(pid_dir) {
+    if os.is_dir(pid_dir) {
         os.walk(pid_dir, rm_file)
         os.rmdir([pid_dir,'context'].join(os.path_separator))
         os.rmdir(pid_dir)
     }
 }
 
-pub fn (t mut Tipsy) update() Context {
+pub fn (mut t Tipsy) update() Context {
 
     //println(t.config)
     t.updated = false
@@ -147,7 +147,7 @@ pub fn (t Tipsy) context_dir() string {
 
 pub fn (t Tipsy) write_attr(attr string, data string) {
     out_dir := t.context_dir()
-    if !os.dir_exists(out_dir) { os.mkdir_all(out_dir) }
+    if !os.is_dir(out_dir) { os.mkdir_all(out_dir) }
     os.write_file([out_dir,attr].join(os.path_separator),data)
 }
 
@@ -155,7 +155,7 @@ pub fn (t Tipsy) write_attr_string_array(attr string, data []string) {
 
     out_file := [t.context_dir(), 'tags'].join(os.path_separator)
 
-    f := os.create(out_file) or { panic(err) }
+    mut f := os.create(out_file) or { panic(err) }
     for tag in t.context.tags {
         f.writeln(tag)
     }
@@ -190,7 +190,7 @@ fn (t Tipsy) extract(win Window) Context {
     if !win.valid { return Context{ window: win, valid: win.valid, config: t.config } }
 
     mut app := ''
-    mut tags := []string
+    mut tags := []string{}
 
     title := win.title
     title_lowercase := title.to_lower()
@@ -201,7 +201,7 @@ fn (t Tipsy) extract(win Window) Context {
     if win.pid <= 0 { // Resolve from window title
         title_split := title.split(' ')
 
-        delimiter := ' '
+        //delimiter := ' '
         first_word := title_split.first()
         last_word := title_split.last()
 
@@ -283,9 +283,9 @@ fn (t Tipsy) extract(win Window) Context {
     }
 
     //println(lookup+' in '+t.apps.str())
-    context_file := os.realpath([t.config.dirs['tips'],app].join(os.path_separator))
+    context_file := os.real_path([t.config.dirs['tips'],app].join(os.path_separator))
     if app in t.apps {
-        if os.file_exists(context_file) {
+        if os.exists(context_file) {
             //content := os.read_file(context_file) or { panic('Couldn\'t read '+context_file) }
             tags << 'has-tip'
             //println(content)
