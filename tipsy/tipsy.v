@@ -62,7 +62,7 @@ pub fn new(config Config) Tipsy {
     data_path := os.real_path(config.dirs['tips'])
     if !os.is_dir(data_path) { panic('Tipsy: "$data_path" is not a directory') }
 
-    pid := C.getpid() // TODO linux only ??
+    pid := os.getpid()
 
     println('Tipsy ('+pid.str()+') in "$data_path"')
 
@@ -72,15 +72,17 @@ pub fn new(config Config) Tipsy {
     files := os.ls(data_path) or { panic(err) }
     for e in files {
         file = data_path+os.path_separator+e
-        if os.exists(file) {
+        if os.is_file(file) {
+			//println('Tipsy ('+pid.str()+') adding tip for "$e"')
             apps << e
         }
     }
 
     parents_file := [data_path,'parents.tipsy'].join(os.path_separator)
     mut parents := []string{}
-    if os.exists(parents_file) {
+    if os.is_file(parents_file) {
         parents = os.read_lines(parents_file) or { []string{} }
+        //println('Tipsy ('+pid.str()+') adding parents $parents')
         apps.delete(apps.index('parents.tipsy'))
     }
 
@@ -94,7 +96,7 @@ pub fn new(config Config) Tipsy {
 }
 
 fn rm_file(path string) {
-    if os.exists(path) {
+    if os.is_file(path) {
         os.rm(path)
     }
 }
@@ -167,13 +169,8 @@ pub fn (t Tipsy) write() {
     ctx := t.context
 
     // TODO include in some DEBUG setup?
-//    println('Writing context')
-
-//    println(ctx.window)
-//    println('app: '+ctx.app)
-//    println('parent: '+ctx.parent)
-//    println('url: '+ctx.url)
-//    println('tags: '+ctx.tags.str())
+    //println('Writing context')
+    //println(ctx)
 
     t.write_attr('app',ctx.app)
     t.write_attr('parent',ctx.parent)
@@ -246,6 +243,7 @@ fn (t Tipsy) extract(win Window) Context {
         has_parent := app in t.parents
 
         if has_parent {
+			//println('$app is parent')
             parent = app
 
             if app == 'konsole' {
@@ -268,7 +266,7 @@ fn (t Tipsy) extract(win Window) Context {
             }
 
             if lookup in t.apps {
-                //println(lookup+' in apps')
+                //println('$lookup in apps')
                 app = lookup
             }
 
@@ -313,7 +311,7 @@ fn (t Tipsy) extract(win Window) Context {
 // See https://github.com/vlang/v/blob/master/tools/performance_compare.v
 fn run( cmd string ) string {
     x := os.exec(cmd) or { return '' }
-    if x.exit_code == 0 { return x.output }
+    if x.exit_code == 0 { return x.output.trim_right('\n') }
     return ''
 }
 
