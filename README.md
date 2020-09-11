@@ -2,21 +2,22 @@
 
 A simple (experimental) productivity tool written in [V](https://vlang.io/).
 
-(Currently tipsy only work on X11/Linux hosts)
+(Currently tipsy only work on X11/Linux hosts).
 
 ## Why
 
 Have you tried working in several different applications each day?
 
 Going to and from many different applications each day make you forget each application's
-hotkeys and special features really quick.
+hotkeys and special features really quick. You get lost and forget what you where
+doing while searching online for an answer.
 
-* How do I play playback that animation in `blender`?
+* How do I playback an animation in `blender`?
 * How do I switch buffers in `vim`?
 * The hotkeys for deattaching a `screen` session?
 
 When you switch to a new new application you have to switch context mentally as well.
-It can thus become a little tedious to remember how you usually do `x` thing in `y` application.
+It can thus become a little tedious to remember how you usually do `X` thing in `Y` application.
 
 It would be nice if you could just have your personal notes changing along when you move your workflow to the next application, right?
 
@@ -29,8 +30,8 @@ How tipsy works:
 
 ## Features
 * Dead simple
-* Easy way to show your own notes in context based on your active application (context)
-* Multiple running context extractors and clients supported
+* Easy way to show your own notes in context based on your active application (context).
+* Multiple running context extractors and clients supported.
 
 ## Dependencies
 `xdotool`, `sed`
@@ -39,17 +40,18 @@ How tipsy works:
 
 Make sure you have [v installed](https://github.com/vlang/v#installing-v-from-source).
 
-Building `tipsy` (context extractor)
+Building `tipsy` (context extractor).
 ```
 git clone git@github.com:larpon/tipsy.git
 cd tipsy
 v -o bin/tipsy tipsy.v
 ```
 
-Building `syncs` (sample context data viewer)
+Building `syncs` (sample context data viewer).
 ```
 v -o bin/syncs clients/syncs.v
 ```
+`syncs` is a sample client that will show your tips in a terminal window.
 
 ## Usage
 
@@ -67,12 +69,12 @@ To try and extract context from sub-processes you currently need to specify whic
 echo "konsole" > ~/tips/parents.tipsy
 ```
 
-Run tipsy (extractor)
+Run tipsy (extractor).
 ```
 bin/tipsy --tips ~/tips
 ```
 
-Run syncs (sample client)
+Run syncs (sample client).
 ```
 bin/syncs --tips ~/tips
 ```
