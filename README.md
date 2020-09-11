@@ -4,6 +4,8 @@ A simple (experimental) productivity tool written in [V](https://vlang.io/).
 
 (Currently tipsy only work on X11/Linux hosts).
 
+![Example](docs/tipsy_example.gif)
+
 ## Why
 
 Have you tried working in several different applications each day?
