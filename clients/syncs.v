@@ -58,7 +58,7 @@ fn main() {
         }
 
         context_dir := [tipsy_work,tpid.str(),'context'].join(os.path_separator)
-        tapp := os.read_file([context_dir,'app'].join(os.path_separator)) or { panic(err) }
+        tapp := os.read_file([context_dir,'app'].join(os.path_separator)) or { continue }
         if tapp != app {
             app = tapp
 
@@ -66,7 +66,7 @@ fn main() {
 
             app_file := [tips_dir,'$app'].join(os.path_separator)
             if os.exists(app_file) {
-                tip := os.read_file(app_file) or { panic(err) }
+                tip := os.read_file(app_file) or { continue }
                 println(tip)
             } else {
                 println('No tip for '+app)
