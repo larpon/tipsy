@@ -97,7 +97,7 @@ pub fn new(config Config) Tipsy {
 
 fn rm_file(path string) {
     if os.is_file(path) {
-        os.rm(path)
+        os.rm(path) or { panic(err) }
     }
 }
 
@@ -106,8 +106,8 @@ pub fn (t Tipsy) end() {
     println('Cleaning up '+pid_dir)
     if os.is_dir(pid_dir) {
         os.walk(pid_dir, rm_file)
-        os.rmdir([pid_dir,'context'].join(os.path_separator))
-        os.rmdir(pid_dir)
+        os.rmdir([pid_dir,'context'].join(os.path_separator)) or { panic(err) }
+        os.rmdir(pid_dir) or { panic(err) }
     }
 }
 
@@ -149,8 +149,10 @@ pub fn (t Tipsy) context_dir() string {
 
 pub fn (t Tipsy) write_attr(attr string, data string) {
     out_dir := t.context_dir()
-    if !os.is_dir(out_dir) { os.mkdir_all(out_dir) }
-    os.write_file([out_dir,attr].join(os.path_separator),data)
+    if !os.is_dir(out_dir) {
+		os.mkdir_all(out_dir) or { panic(err) }
+	}
+    os.write_file([out_dir,attr].join(os.path_separator),data) or { panic(err) }
 }
 
 pub fn (t Tipsy) write_attr_string_array(attr string, data []string) {
@@ -159,7 +161,7 @@ pub fn (t Tipsy) write_attr_string_array(attr string, data []string) {
 
     mut f := os.create(out_file) or { panic(err) }
     for tag in t.context.tags {
-        f.writeln(tag)
+        f.writeln(tag) or { panic(err) }
     }
     f.close()
 }
@@ -310,13 +312,13 @@ fn (t Tipsy) extract(win Window) Context {
 
 // See https://github.com/vlang/v/blob/master/tools/performance_compare.v
 fn run( cmd string ) string {
-    x := os.exec(cmd) or { return '' }
+    x := os.execute(cmd)
     if x.exit_code == 0 { return x.output.trim_right('\n') }
     return ''
 }
 
 fn command_exits_with_zero_status( cmd string ) bool {
-    x := os.exec(cmd) or { return false }
+    x := os.execute(cmd)
     if x.exit_code == 0 { return true }
     return false
 }

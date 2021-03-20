@@ -32,7 +32,7 @@ fn main() {
     tipsy_work := [os.temp_dir(), '.tipsy'].join(os.path_separator)
 
     if warning_display {
-        time.sleep_ms(2000)
+        time.sleep(2000 * time.millisecond)
     }
 
     mut tpid := 0
@@ -41,7 +41,7 @@ fn main() {
         running := os.ls(tipsy_work) or { panic(err) }
 
         if running.len <= 0 {
-            time.sleep_ms(2000)
+            time.sleep(2000 * time.millisecond)
             continue
         }
 
@@ -73,7 +73,7 @@ fn main() {
             }
         }
 
-        time.sleep_ms(1000)
+        time.sleep(1000 * time.millisecond)
     }
 
 }

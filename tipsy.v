@@ -15,8 +15,10 @@ fn on_signal( signum int ) {
     work_dir := [os.temp_dir(), '.tipsy'].join(os.path_separator)
     end_file := [work_dir,C.getpid().str()+'-signal'].join(os.path_separator)
 
-    if !os.is_dir(work_dir) { os.mkdir_all(work_dir) }
-    os.write_file(end_file,signum.str())
+    if !os.is_dir(work_dir) {
+		os.mkdir_all(work_dir) or { panic(err) }
+	}
+    os.write_file(end_file,signum.str()) or { panic(err) }
 
     println('Caught signal '+signum.str())
 }
@@ -50,7 +52,9 @@ fn main() {
     work_dir := [os.temp_dir(), '.tipsy'].join(os.path_separator)
 
     end_file := [work_dir,C.getpid().str()+'-signal'].join(os.path_separator)
-    if os.exists(end_file) { os.rm(end_file) }
+    if os.exists(end_file) {
+		os.rm(end_file) or { panic(err) }
+	}
 
     os.signal(2, on_signal)
 
@@ -67,12 +71,12 @@ fn main() {
 
         if os.exists(end_file) {
             tips.end()
-            os.rm(end_file)
+            os.rm(end_file) or { panic(err) }
             break
         }
 
         if tips.updated { tips.write() }
-        time.sleep_ms(500)
+        time.sleep(500 * time.millisecond)
     }
 
     println('Bye bye')
