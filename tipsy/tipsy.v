@@ -237,7 +237,7 @@ fn (t Tipsy) extract(win Window) Context {
 
     app = lookup
 
-    mut known := false
+    //mut known := false
     mut parent := ''
     mut url := ''
 
@@ -274,7 +274,7 @@ fn (t Tipsy) extract(win Window) Context {
 
             tags << 'has-parent'
         }
-        known = true
+        //known = true
         tags << 'known'
     } else {
         app = lookup

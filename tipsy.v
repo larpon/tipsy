@@ -10,7 +10,7 @@ fn print_and_exit( msg string, exit_code int ) {
     exit(exit_code)
 }
 
-fn on_signal( signum int ) {
+fn on_signal( signum os.Signal ) {
     //println('Bye bye via '+os.sigint_to_signal_name(signum))
     work_dir := [os.temp_dir(), '.tipsy'].join(os.path_separator)
     end_file := [work_dir,C.getpid().str()+'-signal'].join(os.path_separator)
@@ -56,7 +56,7 @@ fn main() {
 		os.rm(end_file) or { panic(err) }
 	}
 
-    os.signal(2, on_signal)
+    os.signal_opt(.int, on_signal) ?
 
     config := tipsy.Config {
         dirs: {
