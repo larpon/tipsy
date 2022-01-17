@@ -57,6 +57,7 @@ v -o bin/syncs clients/syncs.v
 
 Building `gryncs` (sample context data viewer).
 ```
+v install sdl
 v -o bin/gryncs clients/gryncs.v
 ```
 `gryncs` is a sample client that will show your tips in a borderless SDL window.
@@ -85,4 +86,9 @@ bin/tipsy --tips ~/tips
 Run syncs (sample client).
 ```
 bin/syncs --tips ~/tips
+```
+
+Run gryncs (sample graphical client).
+```
+bin/gryncs --tips ~/tips
 ```
