@@ -55,6 +55,12 @@ v -o bin/syncs clients/syncs.v
 ```
 `syncs` is a sample client that will show your tips in a terminal window.
 
+Building `gryncs` (sample context data viewer).
+```
+v -o bin/gryncs clients/gryncs.v
+```
+`gryncs` is a sample client that will show your tips in a borderless SDL window.
+
 ## Usage
 
 Right now tipsy need a directory with a file for each process name you want to provide a context for:
