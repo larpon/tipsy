@@ -117,12 +117,14 @@ fn (mut a App) init() {
 
 	$if linux {
 		// Stops the brief flickering when window opens/closes + the browser canvas going blank
-		sdl.set_hint(sdl.hint_video_x11_net_wm_bypass_compositor, '0')
+		sdl.set_hint(sdl.hint_video_x11_net_wm_bypass_compositor.str, '0'.str)
 	}
 	sdl.init(sdl.init_video)
 	ttf.init()
 
-	_, mut mx, mut my := sdl.get_global_mouse_state()
+	mut mx := 0
+	mut my := 0
+	sdl.get_global_mouse_state(&mx,&my)
 
 	mut display_number := 0
 
@@ -150,18 +152,18 @@ fn (mut a App) init() {
 
 	// display := sdl.get_window_display_index(window)
 
-	a.ui.font = ttf.open_font(font.get_path_variant(font.default(), .mono), font_size)
+	a.ui.font = ttf.open_font(font.get_path_variant(font.default(), .mono).str, font_size)
 	mut txt_w, mut txt_h := 0, 0
-	ttf.size_utf8(a.ui.font, 'Åj', &txt_w, &txt_h)
+	ttf.size_utf8(a.ui.font, 'Åj'.str, &txt_w, &txt_h)
 
 	a.text_input.text_height = txt_h
-	win_h := txt_h * 20
+	win_h := txt_h * 16
 	win_w := (display_bounds[display_number].w / 3) - 60
 
 	x := display_bounds[display_number].x + display_bounds[display_number].w - win_w
 	y := display_bounds[display_number].y
 
-	window := sdl.create_window('gryncs', x, y, win_w, win_h, u32(sdl.WindowFlags.borderless) | u32(sdl.WindowFlags.skip_taskbar))
+	window := sdl.create_window('gryncs'.str, x, y, win_w, win_h, u32(sdl.WindowFlags.borderless) | u32(sdl.WindowFlags.skip_taskbar))
 	//| u32(sdl.WindowFlags.resizable)
 	renderer := sdl.create_renderer(window, -1, u32(sdl.RendererFlags.accelerated)) //| u32(sdl.RendererFlags.presentvsync)
 
@@ -363,22 +365,22 @@ fn (mut a App) draw_text_input() {
 	// if !a.text_input.has_updates {
 	//	return
 	//}
-	rdr := a.ui.renderer
-	win_w, win_h := a.width_and_height()
+	//rdr := a.ui.renderer
+	//win_w, win_h := a.width_and_height()
 
 	txt := a.text_input.text
 
 	// txt_h := a.text_input.text_height
 
-	gutter_rect := sdl.Rect{0, 0, win_w, win_h}
+	// gutter_rect := sdl.Rect{0, 0, win_w, win_h}
 
 	/*
 	sdl.set_render_draw_color(rdr, 35, 38, 41, 255)
 	sdl.render_fill_rect(rdr, &gutter_rect)
 	*/
 
-	sdl.set_render_draw_color(rdr, 255, 255, 255, 64)
-	sdl.render_draw_rect(rdr, &gutter_rect)
+	// sdl.set_render_draw_color(rdr, 255, 255, 255, 64)
+	// sdl.render_draw_rect(rdr, &gutter_rect)
 
 	if txt.trim(' ') != '' {
 		a.draw_text_at(txt, 1, 1, sdl.Color{255, 255, 255, 200})
@@ -388,14 +390,16 @@ fn (mut a App) draw_text_input() {
 fn (a &App) draw_text_at(text string, x int, y int, color sdl.Color) {
 	if !isnil(a.ui.font) {
 		win_w, _ := a.width_and_height()
-		sf := ttf.render_utf8_blended_wrapped(a.ui.font, text, color, u32(win_w))
+		sf := ttf.render_utf8_blended_wrapped(a.ui.font, text.str, color, u32(win_w))
 		if isnil(sf) {
 			return
 		}
 		texture := sdl.create_texture_from_surface(a.ui.renderer, sf)
 		texw := 0
 		texh := 0
-		sdl.query_texture(texture, 0, 0, &texw, &texh)
+		u32null := u32(0)
+		intnull := 0
+		sdl.query_texture(texture, &u32null, &intnull, &texw, &texh)
 		dst_rect := sdl.Rect{x, y, texw, texh}
 		sdl.render_copy(a.ui.renderer, texture, sdl.null, &dst_rect)
 		sdl.destroy_texture(texture)
@@ -407,11 +411,13 @@ fn (a &App) draw_text_at(text string, x int, y int, color sdl.Color) {
 
 fn (a &App) rendered_text_size(text string) (int, int) {
 	if !isnil(a.ui.font) {
-		sf := ttf.render_utf8_blended(a.ui.font, text, sdl.Color{255, 255, 255, 255})
+		sf := ttf.render_utf8_blended(a.ui.font, text.str, sdl.Color{255, 255, 255, 255})
 		texture := sdl.create_texture_from_surface(a.ui.renderer, sf)
 		texw := 0
 		texh := 0
-		sdl.query_texture(texture, 0, 0, &texw, &texh)
+		u32null := u32(0)
+		intnull := 0
+		sdl.query_texture(texture, &u32null, &intnull, &texw, &texh)
 		// dst_rect := sdl.Rect{x, y, texw, texh}
 		// sdl.render_copy(a.ui.renderer, texture, sdl.null, &dst_rect)
 		sdl.destroy_texture(texture)
