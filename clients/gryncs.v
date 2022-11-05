@@ -47,13 +47,13 @@ struct SDLContext {
 pub mut:
 	w        int
 	h        int
-	window   &sdl.Window
-	renderer &sdl.Renderer
-	screen   &sdl.Surface
-	texture  &sdl.Texture
+	window   &sdl.Window   = unsafe { nil }
+	renderer &sdl.Renderer = unsafe { nil }
+	screen   &sdl.Surface  = unsafe { nil }
+	texture  &sdl.Texture  = unsafe { nil }
 	// Text
 	// TTF context for font drawing
-	font &ttf.Font
+	font &ttf.Font = unsafe { nil }
 }
 
 struct App {
@@ -124,7 +124,7 @@ fn (mut a App) init() {
 
 	mut mx := 0
 	mut my := 0
-	sdl.get_global_mouse_state(&mx,&my)
+	sdl.get_global_mouse_state(&mx, &my)
 
 	mut display_number := 0
 
@@ -314,7 +314,7 @@ fn (mut a App) process_events() {
 			}
 			.keydown {
 				a.keys_state[int(evt.key.keysym.sym)] = true
-				key := sdl.KeyCode(evt.key.keysym.sym)
+				key := unsafe { sdl.KeyCode(evt.key.keysym.sym) }
 				// a.dbg('${sdl.get_key_name(evt.key.keysym.sym)} / $key pressed')
 
 				is_ctrl_held := a.is_key_held(.lctrl) || a.is_key_held(.rctrl)
@@ -365,8 +365,8 @@ fn (mut a App) draw_text_input() {
 	// if !a.text_input.has_updates {
 	//	return
 	//}
-	//rdr := a.ui.renderer
-	//win_w, win_h := a.width_and_height()
+	// rdr := a.ui.renderer
+	// win_w, win_h := a.width_and_height()
 
 	txt := a.text_input.text
 

@@ -57,16 +57,20 @@ fn main() {
 		os.rm(end_file) or { panic(err) }
 	}
 
-	os.signal_opt(.int, on_signal) ?
+	os.signal_opt(.int, on_signal)!
 
+	// vfmt off
 	config := tipsy.Config{
+		// vfmt on
 		dirs: {
 			'tips': tips_dir
 			'work': work_dir
 		}
 	}
 
+	// vfmt off
 	mut tips := tipsy.new(config)
+	// vfmt on
 	for {
 		tips.update()
 
