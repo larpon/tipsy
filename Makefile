@@ -1,15 +1,21 @@
 VEXE ?= v
 VFLAGS ?=
 
-.PHONY: all tipsy syncs gryncs
+.PHONY: all #bin/tipsy bin/syncs bin/gryncs
 
-all: tipsy syncs gryncs
+all: bin/tipsy bin/syncs bin/gryncs
 
-tipsy:
+bin/tipsy: tipsy.v | bin
 	$(VEXE) $(VFLAGS) -o ./bin/tipsy tipsy.v
 
-syncs:
-	$(VEXE) $(VFLAGS) -o ./bin/syncs ./clients/syncs.v
+bin/syncs: clients/syncs.v | bin
+	$(VEXE) $(VFLAGS) -o ./bin/syncs clients/syncs.v
 
-gryncs:
-	$(VEXE) $(VFLAGS) -o ./bin/gryncs ./clients/gryncs.v
+bin/gryncs: clients/gryncs.v | bin
+	$(VEXE) $(VFLAGS) -o ./bin/gryncs clients/gryncs.v
+
+bin:
+	mkdir -p $@
+
+clean:
+	rm bin/tipsy bin/syncs bin/gryncs
