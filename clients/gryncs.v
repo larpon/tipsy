@@ -106,7 +106,7 @@ fn (mut a App) init() {
 
 	a.tips_dir = fp.string('tips', 0, '', 'Path to tips')
 	if !os.is_dir(a.tips_dir) {
-		panic('Tips directory "$a.tips_dir" doesn\'t exist')
+		panic('Tips directory "${a.tips_dir}" doesn\'t exist')
 	}
 
 	fp.finalize() or {
@@ -147,7 +147,7 @@ fn (mut a App) init() {
 	// TODO
 	$if debug_gryncs ? {
 		dn := unsafe { cstring_to_vstring(sdl.get_display_name(display_number)) }
-		a.dbg('Opening on screen $display_number "$dn" ($mx,$my)')
+		a.dbg('Opening on screen ${display_number} "${dn}" (${mx},${my})')
 	}
 
 	// display := sdl.get_window_display_index(window)
@@ -275,12 +275,12 @@ fn (mut a App) update() {
 	if tapp != app {
 		app = tapp
 
-		app_file := os.join_path(a.tips_dir, '$app')
+		app_file := os.join_path(a.tips_dir, '${app}')
 		if os.exists(app_file) {
 			tip := os.read_file(app_file) or { return }
 			a.text_input.text = tip
 		} else {
-			a.text_input.text = 'No tip for $app'
+			a.text_input.text = 'No tip for ${app}'
 		}
 	}
 
@@ -292,8 +292,8 @@ fn (mut a App) draw() {
 
 	if a.runtime_debug {
 		win_w, _ := a.width_and_height()
-		ch_w, _ := a.rendered_text_size('$a.fps_snapshot')
-		a.draw_text_at('$a.fps_snapshot', win_w - ch_w, 0, sdl.Color{55, 255, 255, 127})
+		ch_w, _ := a.rendered_text_size('${a.fps_snapshot}')
+		a.draw_text_at('${a.fps_snapshot}', win_w - ch_w, 0, sdl.Color{55, 255, 255, 127})
 	}
 }
 
@@ -328,7 +328,7 @@ fn (mut a App) process_events() {
 					.d {
 						if is_ctrl_held {
 							a.runtime_debug = !a.runtime_debug
-							eprintln('Runtime debugging: $a.runtime_debug')
+							eprintln('Runtime debugging: ${a.runtime_debug}')
 						}
 					}
 					else {

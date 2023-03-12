@@ -18,7 +18,7 @@ fn main() {
 	tips_dir := fp.string('tips', 0, '', 'Path to tips')
 	if !os.is_dir(tips_dir) {
 		warning_display = true
-		eprintln('Tips directory "$tips_dir" doesn\'t exist')
+		eprintln('Tips directory "${tips_dir}" doesn\'t exist')
 	}
 
 	// additional_args :=
@@ -70,7 +70,7 @@ fn main() {
 
 			term.clear()
 
-			app_file := os.join_path(tips_dir, '$app')
+			app_file := os.join_path(tips_dir, '${app}')
 			if os.exists(app_file) {
 				tip := os.read_file(app_file) or { continue }
 				println(tip)

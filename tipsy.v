@@ -44,7 +44,7 @@ fn main() {
 
 	// TODO provide default? ~/.tipsy/tips or something
 	if !os.is_dir(tips_dir) {
-		panic('Tips directory "$tips_dir" doesn\'t exist')
+		panic('Tips directory "${tips_dir}" doesn\'t exist')
 		// default_dir := os.home_dir()+(['.tipsy','tips'].join(os.path_separator))
 		// println('Using default tips directory "$default_dir" as "$tips_dir" doesn\'t exist')
 		// tips_dir = default_dir

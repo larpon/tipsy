@@ -58,12 +58,12 @@ pub fn new(config Config) Tipsy {
 
 	data_path := os.real_path(config.dirs['tips'])
 	if !os.is_dir(data_path) {
-		panic('Tipsy: "$data_path" is not a directory')
+		panic('Tipsy: "${data_path}" is not a directory')
 	}
 
 	pid := os.getpid()
 
-	println('Tipsy (' + pid.str() + ') in "$data_path"')
+	println('Tipsy (' + pid.str() + ') in "${data_path}"')
 
 	mut apps := []string{}
 	mut file := ''
@@ -150,7 +150,7 @@ pub fn (mut t Tipsy) update() Context {
 	// TODO run these two in parallel and wait for them when available in v
 	mut window_pid := 0
 	if valid {
-		window_pid = run('xdotool getwindowpid "$active_window_id"').int()
+		window_pid = run('xdotool getwindowpid "${active_window_id}"').int()
 	}
 
 	win := Window{
@@ -293,14 +293,14 @@ fn (t Tipsy) extract(win Window) Context {
 			parent = app
 
 			if app == 'konsole' {
-				lookup = run('echo "$title_lowercase" | sed -r \'s/.* : (.*) — konsole/\\1/g\'') // TODO replace by V regex solution when available
+				lookup = run('echo "${title_lowercase}" | sed -r \'s/.* : (.*) — konsole/\\1/g\'') // TODO replace by V regex solution when available
 
-				url = run('echo "$title_lowercase" | sed -r \'s/(.*) : .* — konsole/\\1/g\'') // TODO replace by V regex solution when available
+				url = run('echo "${title_lowercase}" | sed -r \'s/(.*) : .* — konsole/\\1/g\'') // TODO replace by V regex solution when available
 
 				// echo -e "has-parent\nparent-$_parent" >> "$_tags_file.tmp"
 				// echo "$_path" > "$_dir_file"
 			} else if app == 'AppRun' {
-				lookup = run('echo "$title_lowercase" | sed -r \'s/.*— (.*)/\\1/g\'')
+				lookup = run('echo "${title_lowercase}" | sed -r \'s/.*— (.*)/\\1/g\'')
 
 				// println('HEY '+lookup+' : '+rt)
 				//_lookup=$(sed -r 's/.*— (.*)/\1/g' <<< "$_w_str_lower")
@@ -373,10 +373,10 @@ fn command_exits_with_zero_status(cmd string) bool {
 // TODO make variadic : toolcmd ...string , toolcmd[0]?
 // See https://github.com/vlang/v/blob/master/compiler/tests/fn_variadic_test.v
 fn expect_tool(toolcmd string) {
-	if command_exits_with_zero_status('type $toolcmd') {
+	if command_exits_with_zero_status('type ${toolcmd}') {
 		return
 	}
-	eprintln('Missing tool: $toolcmd')
+	eprintln('Missing tool: ${toolcmd}')
 	eprintln('Please try again after you install it.')
 	exit(1)
 }
