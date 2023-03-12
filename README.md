@@ -42,6 +42,12 @@ How tipsy works:
 
 Make sure you have [v installed](https://github.com/vlang/v#installing-v-from-source).
 
+### make
+
+Example of a production build:
+`VFLAGS="-skip-unused -prod" make`
+
+### Manually
 Building `tipsy` (context extractor).
 ```
 git clone git@github.com:larpon/tipsy.git

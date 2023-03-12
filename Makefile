@@ -1,7 +1,7 @@
 VEXE ?= v
 VFLAGS ?=
 
-.PHONY: all #bin/tipsy bin/syncs bin/gryncs
+.PHONY: all
 
 all: bin/tipsy bin/syncs bin/gryncs
 
